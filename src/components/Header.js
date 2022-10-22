@@ -1,6 +1,6 @@
-import logo from "../images/logo.svg";
+import logo from '../images/logo.svg';
 
-function Header() {
+function Header({ children }) {
   return (
     <header className="header">
       <img
@@ -8,6 +8,7 @@ function Header() {
         src={logo}
         alt="Logo do site Around the U.S."
       />
+      {children}
     </header>
   );
 }
