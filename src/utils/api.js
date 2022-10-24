@@ -34,10 +34,10 @@ class Api {
 
   updateProfileInformation(profileName, profileJob) {
     return fetch(`${this.baseUrl}/users/me`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
         authorization: this.authorization,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         name: profileName,
@@ -54,10 +54,10 @@ class Api {
 
   createCards(name, link) {
     return fetch(`${this.baseUrl}/cards`, {
-      method: "POST",
+      method: 'POST',
       headers: {
         authorization: this.authorization,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         name: name,
@@ -74,7 +74,7 @@ class Api {
 
   deleteCard(index) {
     return fetch(`${this.baseUrl}/cards/${index}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
         authorization: this.authorization,
       },
@@ -89,10 +89,10 @@ class Api {
 
   favoriteCard(index) {
     return fetch(`${this.baseUrl}/cards/likes/${index}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
         authorization: this.authorization,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }).then((res) => {
       if (res.ok) {
@@ -105,10 +105,10 @@ class Api {
 
   unfavoriteCard(index) {
     return fetch(`${this.baseUrl}/cards/likes/${index}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
         authorization: this.authorization,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }).then((res) => {
       if (res.ok) {
@@ -121,10 +121,10 @@ class Api {
 
   updateProfilePhoto(link) {
     return fetch(`${this.baseUrl}/users/me/avatar`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
         authorization: this.authorization,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         avatar: link,
@@ -141,9 +141,9 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://around.nomoreparties.co/v1/web_ptbr_cohort_01",
+  baseUrl: 'https://around.nomoreparties.co/v1/web_ptbr_cohort_01',
   headers: {
-    authorization: "eec28881-3af1-4bc7-8205-97cb48fed523",
+    authorization: 'eec28881-3af1-4bc7-8205-97cb48fed523',
   },
 });
 

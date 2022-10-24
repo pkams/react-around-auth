@@ -20,7 +20,7 @@ export default function InfoTooltip(props) {
         />
         <h2 className="infotooltip__title">
           {props.isSucceed
-            ? 'Vitória! Você precisa se registrar.'
+            ? 'Vitória! Você cadastrou um novo usuário.'
             : 'Ops, algo saiu deu errado!'}
         </h2>
       </div>

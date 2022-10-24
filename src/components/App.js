@@ -10,7 +10,7 @@ import AddPlacePopup from './AddPlacePopup';
 import api from '../utils/api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import '../index.css';
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login.js';
 import Register from './Register.js';
@@ -25,9 +25,14 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
 
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [userData, setUserData] = React.useState({ email: '' });
+
+  const [loggedIn, setLoggedIn] = React.useState(false);
+
+  const history = useHistory();
 
   React.useEffect(() => {
+    tokenCheck();
     api
       .getProfileInformation()
       .then((result) => {
@@ -46,6 +51,10 @@ function App() {
         console.log(err);
       });
   }, []);
+
+  React.useEffect(() => {
+    tokenCheck();
+  }, [loggedIn]);
 
   function handleEditAvatarClick() {
     setEditAvatarPopupOpen(true);
@@ -118,13 +127,65 @@ function App() {
     closeAllPopups();
   }
 
+  function onSignOut(e) {
+    localStorage.removeItem('token');
+    setLoggedIn(false);
+  }
+
+  function onLogin(info, setIsSucceed, setIsPopupOpen) {
+    const { password, email } = info;
+    auth.authorize(password, email).then((res) => {
+      if (res) {
+        setLoggedIn(true);
+        history.push('/');
+      } else {
+        setIsSucceed(false);
+        setIsPopupOpen(true);
+      }
+    });
+  }
+
+  function onRegister(info, setIsSucceed, setIsPopupOpen) {
+    const { password, email } = info;
+    auth.register(password, email).then((res) => {
+      console.log(res);
+      if (!res.error) {
+        setIsSucceed(true);
+      } else {
+        setIsSucceed(false);
+      }
+      setIsPopupOpen(true);
+    });
+  }
+
+  function tokenCheck() {
+    // se o usuário tiver um token em localStorage,
+    // essa função irá verificar se o usuário tem um token válido
+    const jwt = localStorage.getItem('token');
+    if (jwt) {
+      // vamos verificar o token
+      auth.checkToken(jwt).then((res) => {
+        console.log(res);
+        if (res) {
+          const data = {
+            email: res.data.email,
+          };
+          // vamos logar o usuário
+          setUserData(data);
+          setLoggedIn(true);
+          history.push('/');
+        }
+      });
+    }
+  }
+
   return (
     <>
       <Switch>
-        <Route path="/signup">
-          <Login></Login>
-        </Route>
         <Route path="/signin">
+          <Login setLoggedIn={setLoggedIn} onLogin={onLogin}></Login>
+        </Route>
+        <Route path="/signup" onRegister={onRegister}>
           <Register></Register>
         </Route>
         <ProtectedRoute path="/" loggedIn={loggedIn}>
@@ -155,7 +216,14 @@ function App() {
               </PopupWithForm>
 
               <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-              <Header />
+              <Header>
+                <div className="header__info">
+                  <p className="header__note">{userData.email}</p>
+                  <a className="header__logout" onClick={onSignOut}>
+                    Sair
+                  </a>
+                </div>
+              </Header>
               <Main
                 onEditAvatarClick={handleEditAvatarClick}
                 onEditProfileClick={handleEditProfileClick}
