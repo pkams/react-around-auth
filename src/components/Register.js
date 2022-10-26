@@ -27,7 +27,7 @@ export default function Register(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.onRegister();
+    props.onRegister(info, setIsSucceed, setIsPopupOpen);
     e.target.reset();
   }
 

@@ -165,7 +165,6 @@ function App() {
     if (jwt) {
       // vamos verificar o token
       auth.checkToken(jwt).then((res) => {
-        console.log(res);
         if (res) {
           const data = {
             email: res.data.email,
@@ -185,8 +184,8 @@ function App() {
         <Route path="/signin">
           <Login setLoggedIn={setLoggedIn} onLogin={onLogin}></Login>
         </Route>
-        <Route path="/signup" onRegister={onRegister}>
-          <Register></Register>
+        <Route path="/signup">
+          <Register onRegister={onRegister}></Register>
         </Route>
         <ProtectedRoute path="/" loggedIn={loggedIn}>
           <CurrentUserContext.Provider value={currentUser}>
